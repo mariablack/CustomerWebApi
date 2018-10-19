@@ -100,4 +100,3 @@ C:\Users\Maria\source\repos\CustomersWebApi\CustomersWebApi\bin\EntityFramework.
 C:\Users\Maria\source\repos\CustomersWebApi\CustomersWebApi\bin\EntityFramework.SqlServer.xml
 C:\Users\Maria\source\repos\CustomersWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.Migrations.Initial.resources
 C:\Users\Maria\source\repos\CustomersWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.csproj.GenerateResource.cache
-C:\Users\Maria\source\repos\CustomersWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.csprojAssemblyReference.cache

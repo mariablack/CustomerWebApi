@@ -9,8 +9,12 @@ namespace CustomersWebApi.Models
     public class Customer
     {
         public int Id { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Title is required")]
+        [StringLength(200)]
         public string Title { get; set; }
+
+        [Range(0, 10000, ErrorMessage = "NumberOfEmployees must not be greater than 10000")]
         public int NumberOfEmployees { get; set; }
     }
 }

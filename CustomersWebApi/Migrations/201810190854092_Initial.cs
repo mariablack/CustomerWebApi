@@ -12,9 +12,9 @@ namespace CustomersWebApi.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        FirstName = c.String(nullable: false),
-                        LastName = c.String(),
-                        Email = c.String(),
+                        FirstName = c.String(nullable: false, maxLength: 100),
+                        LastName = c.String(nullable: false, maxLength: 100),
+                        Email = c.String(nullable: false, maxLength: 100),
                         CustomerId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
@@ -26,7 +26,7 @@ namespace CustomersWebApi.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Title = c.String(nullable: false),
+                        Title = c.String(nullable: false, maxLength: 200),
                         NumberOfEmployees = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
