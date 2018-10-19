@@ -52,6 +52,7 @@ namespace CustomersWebApi.Controllers
 
             db.Entry(customer).State = EntityState.Modified;
 
+
             try
             {
                 await db.SaveChangesAsync();
