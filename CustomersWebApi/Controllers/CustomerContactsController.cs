@@ -42,7 +42,7 @@ namespace CustomersWebApi.Controllers
             CustomerContacts customerContacts = db.CustomerContacts.Find(id);
             if (customerContacts == null)
             {
-                log.Error("GetCustomerContacts method: Customer id did not found");
+                log.Error($"GetCustomerContacts method: Customer id {id} did not found");
                 return NotFound();
             }
 
@@ -55,13 +55,13 @@ namespace CustomersWebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.Error("PutCustomerContacts method: InValid ModelState");
+                log.Error($"PutCustomerContacts method: InValid ModelState fosr Customer Contact with id {id}");
                 return BadRequest(ModelState);
             }
 
             if (id != customerContacts.Id)
             {
-                log.Error("PutCustomerContacts method: Wrong Customer id");
+                log.Error($"PutCustomerContacts method: Wrong Customer id {id}");
                 return BadRequest();
             }
 
@@ -75,12 +75,12 @@ namespace CustomersWebApi.Controllers
             {
                 if (!CustomerContactsExists(id))
                 {
-                    log.Error("PutCustomerContacts method: Customer id did not found");
+                    log.Error($"PutCustomerContacts method: Customer id {id} did not found");
                     return NotFound();
                 }
                 else
                 {
-                    log.Error("PutCustomerContacts method: Exception thrown in db.SaveChangesAsync()");
+                    log.Error("PutCustomerContacts method: Exception thrown in db.SaveChanges()");
                     throw;
                 }
             }
@@ -94,7 +94,7 @@ namespace CustomersWebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.Error("PostCustomerContacts method: Invalid ModelState");
+                log.Error($"PostCustomerContacts method: Invalid ModelState for Customer Contact with id {customerContacts.Id}");
                 return BadRequest(ModelState);
             }
 
@@ -111,7 +111,7 @@ namespace CustomersWebApi.Controllers
             CustomerContacts customerContacts = db.CustomerContacts.Find(id);
             if (customerContacts == null)
             {
-                log.Error("DeleteCustomer method: Customer did not found");
+                log.Error($"DeleteCustomer method: Customer did {id} not found");
                 return NotFound();
             }
 

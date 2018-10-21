@@ -65,22 +65,6 @@ namespace CustomersWebApi.Tests
                 Assert.AreEqual(3, result.Content.Id);
             }
 
-            //[TestMethod]
-            //public void GetCustomers_ShouldReturnAllCustomers()
-            //{
-            //    var context = new CustomersWebApiContext();
-            //    context.Customers.Add(new Customer () { Id = 10, Title = "Example1", NumberOfEmployees = 6 });
-            //    context.Customers.Add(new Customer () { Id = 11, Title = "Example2", NumberOfEmployees = 7 });
-            //    context.Customers.Add(new Customer () { Id = 12, Title = "Example3", NumberOfEmployees = 8 });
-
-            //    var t = context.Customers.Count();
-
-            //    var controller = new CustomersController(context);
-            //    var result = controller.GetCustomers() as TestCustomerDbSet;
-
-            //    Assert.IsNotNull(result);
-            //    Assert.AreEqual(3, result.Local.Count);
-            //}
 
             [TestMethod]
             public void DeleteCustomer_ShouldReturnOK()

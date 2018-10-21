@@ -41,7 +41,7 @@ namespace CustomersWebApi.Controllers
             Customer customer = db.Customers.Find(id);
             if (customer == null)
             {
-                log.Error("GetCustomer method: Customer id did not found");
+                log.Error($"GetCustomer method: Customer id {id} did not found");
                 return NotFound();
             }
 
@@ -54,13 +54,13 @@ namespace CustomersWebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.Error("PutCustomer method: InValid ModelState");
+                log.Error($"PutCustomer method: InValid ModelState for customer with id {id}");
                 return BadRequest(ModelState);
             }
 
             if (id != customer.Id)
             {
-                log.Error("PutCustomer method: Wrong Customer id");
+                log.Error($"PutCustomer method: Wrong Customer id {id}");
                 return BadRequest();
             }
 
@@ -75,12 +75,12 @@ namespace CustomersWebApi.Controllers
             {
                 if (!CustomerExists(id))
                 {
-                    log.Error("PutCustomer method: Customer id did not found");
+                    log.Error($"PutCustomer method: Customer id {id} did not found");
                     return NotFound();
                 }
                 else
                 {
-                    log.Error("PutCustomer method: Exception thrown in db.SaveChangesAsync()");
+                    log.Error("PutCustomer method: Exception thrown in db.SaveChanges()");
                     throw;
                 }
             }
@@ -94,7 +94,7 @@ namespace CustomersWebApi.Controllers
         {
             if (!ModelState.IsValid)
             {
-                log.Error("PostCustomer method: Invalid ModelState");
+                log.Error($"PostCustomer method: Invalid ModelState with id {customer.Id}");
                 return BadRequest(ModelState);
             }
 
@@ -111,7 +111,7 @@ namespace CustomersWebApi.Controllers
             Customer customer = db.Customers.Find(id);
             if (customer == null)
             {
-                log.Error("DeleteCustomer method: Customer did not found");
+                log.Error($"DeleteCustomer method: Customer with id {id} did not found");
                 return NotFound();
             }
 
