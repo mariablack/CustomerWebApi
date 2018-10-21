@@ -8,13 +8,25 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Web.Mvc;
 using CustomersWebApi.Models;
+using log4net;
 
 namespace CustomersWebApi.Controllers
 {
     public class CustomersController : ApiController
     {
-        private CustomersWebApiContext db = new CustomersWebApiContext();
+        //log4net
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        private ICustomerAppContext db = new CustomersWebApiContext();
+
+        public CustomersController() { }
+
+        public CustomersController(ICustomerAppContext context)
+        {
+            db = context;
+        }
 
         // GET: api/Customers
         public IQueryable<Customer> GetCustomers()
@@ -24,11 +36,12 @@ namespace CustomersWebApi.Controllers
 
         // GET: api/Customers/5
         [ResponseType(typeof(Customer))]
-        public async Task<IHttpActionResult> GetCustomer(int id)
+        public IHttpActionResult GetCustomer(int id)
         {
-            Customer customer = await db.Customers.FindAsync(id);
+            Customer customer = db.Customers.Find(id);
             if (customer == null)
             {
+                log.Error("GetCustomer method: Customer id did not found");
                 return NotFound();
             }
 
@@ -37,33 +50,37 @@ namespace CustomersWebApi.Controllers
 
         // PUT: api/Customers/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutCustomer(int id, Customer customer)
+        public IHttpActionResult PutCustomer(int id, Customer customer)
         {
             if (!ModelState.IsValid)
             {
+                log.Error("PutCustomer method: InValid ModelState");
                 return BadRequest(ModelState);
             }
 
             if (id != customer.Id)
             {
+                log.Error("PutCustomer method: Wrong Customer id");
                 return BadRequest();
             }
 
-            db.Entry(customer).State = EntityState.Modified;
+            db.MarkAsModifiedCustomer(customer);
 
 
             try
             {
-                await db.SaveChangesAsync();
+                 db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!CustomerExists(id))
                 {
+                    log.Error("PutCustomer method: Customer id did not found");
                     return NotFound();
                 }
                 else
                 {
+                    log.Error("PutCustomer method: Exception thrown in db.SaveChangesAsync()");
                     throw;
                 }
             }
@@ -73,31 +90,33 @@ namespace CustomersWebApi.Controllers
 
         // POST: api/Customers
         [ResponseType(typeof(Customer))]
-        public async Task<IHttpActionResult> PostCustomer(Customer customer)
+        public IHttpActionResult PostCustomer(Customer customer)
         {
             if (!ModelState.IsValid)
             {
+                log.Error("PostCustomer method: Invalid ModelState");
                 return BadRequest(ModelState);
             }
 
             db.Customers.Add(customer);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = customer.Id }, customer);
         }
 
         // DELETE: api/Customers/5
         [ResponseType(typeof(Customer))]
-        public async Task<IHttpActionResult> DeleteCustomer(int id)
+        public IHttpActionResult DeleteCustomer(int id)
         {
-            Customer customer = await db.Customers.FindAsync(id);
+            Customer customer = db.Customers.Find(id);
             if (customer == null)
             {
+                log.Error("DeleteCustomer method: Customer did not found");
                 return NotFound();
             }
 
             db.Customers.Remove(customer);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(customer);
         }
@@ -116,7 +135,7 @@ namespace CustomersWebApi.Controllers
             return db.Customers.Count(e => e.Id == id) > 0;
         }
 
-
+        
 
     }
 }

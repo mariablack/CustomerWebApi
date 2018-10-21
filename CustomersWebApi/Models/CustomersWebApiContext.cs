@@ -6,7 +6,7 @@ using System.Web;
 
 namespace CustomersWebApi.Models
 {
-    public class CustomersWebApiContext : DbContext
+    public class CustomersWebApiContext : DbContext, ICustomerAppContext , ICustomerContactsAppContext
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
@@ -23,5 +23,16 @@ namespace CustomersWebApi.Models
         public System.Data.Entity.DbSet<CustomersWebApi.Models.Customer> Customers { get; set; }
 
         public System.Data.Entity.DbSet<CustomersWebApi.Models.CustomerContacts> CustomerContacts { get; set; }
+
+
+        public void MarkAsModifiedCustomer(Customer customer)
+        {
+            Entry(customer).State = EntityState.Modified;
+        }
+
+        public void MarkAsModifiedContact(CustomerContacts customerContacts)
+        {
+            Entry(customerContacts).State = EntityState.Modified;
+        }
     }
 }

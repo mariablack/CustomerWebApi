@@ -10,26 +10,39 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using CustomersWebApi.Models;
+using log4net;
 
 namespace CustomersWebApi.Controllers
 {
     public class CustomerContactsController : ApiController
     {
-        private CustomersWebApiContext db = new CustomersWebApiContext();
+        private ICustomerContactsAppContext db = new CustomersWebApiContext();
+
+        public CustomerContactsController() { }
+
+        public CustomerContactsController(CustomersWebApiContext context)
+        {
+            db = context;
+        }
+
+        //log4net
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         // GET: api/CustomerContacts
         public IQueryable<CustomerContacts> GetCustomerContacts()
         {
-            return db.CustomerContacts.Include(b => b.Customer);
+            return db.CustomerContacts
+                .Include(b => b.Customer);
         }
 
         // GET: api/CustomerContacts/5
         [ResponseType(typeof(CustomerContacts))]
-        public async Task<IHttpActionResult> GetCustomerContacts(int id)
+        public IHttpActionResult GetCustomerContacts(int id)
         {
-            CustomerContacts customerContacts = await db.CustomerContacts.FindAsync(id);
+            CustomerContacts customerContacts = db.CustomerContacts.Find(id);
             if (customerContacts == null)
             {
+                log.Error("GetCustomerContacts method: Customer id did not found");
                 return NotFound();
             }
 
@@ -38,32 +51,36 @@ namespace CustomersWebApi.Controllers
 
         // PUT: api/CustomerContacts/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutCustomerContacts(int id, CustomerContacts customerContacts)
+        public IHttpActionResult PutCustomerContacts(int id, CustomerContacts customerContacts)
         {
             if (!ModelState.IsValid)
             {
+                log.Error("PutCustomerContacts method: InValid ModelState");
                 return BadRequest(ModelState);
             }
 
             if (id != customerContacts.Id)
             {
+                log.Error("PutCustomerContacts method: Wrong Customer id");
                 return BadRequest();
             }
 
-            db.Entry(customerContacts).State = EntityState.Modified;
+            db.MarkAsModifiedContact(customerContacts);
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!CustomerContactsExists(id))
                 {
+                    log.Error("PutCustomerContacts method: Customer id did not found");
                     return NotFound();
                 }
                 else
                 {
+                    log.Error("PutCustomerContacts method: Exception thrown in db.SaveChangesAsync()");
                     throw;
                 }
             }
@@ -73,31 +90,33 @@ namespace CustomersWebApi.Controllers
 
         // POST: api/CustomerContacts
         [ResponseType(typeof(CustomerContacts))]
-        public async Task<IHttpActionResult> PostCustomerContacts(CustomerContacts customerContacts)
+        public IHttpActionResult PostCustomerContacts(CustomerContacts customerContacts)
         {
             if (!ModelState.IsValid)
             {
+                log.Error("PostCustomerContacts method: Invalid ModelState");
                 return BadRequest(ModelState);
             }
 
             db.CustomerContacts.Add(customerContacts);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = customerContacts.Id }, customerContacts);
         }
 
         // DELETE: api/CustomerContacts/5
         [ResponseType(typeof(CustomerContacts))]
-        public async Task<IHttpActionResult> DeleteCustomerContacts(int id)
+        public IHttpActionResult DeleteCustomerContacts(int id)
         {
-            CustomerContacts customerContacts = await db.CustomerContacts.FindAsync(id);
+            CustomerContacts customerContacts = db.CustomerContacts.Find(id);
             if (customerContacts == null)
             {
+                log.Error("DeleteCustomer method: Customer did not found");
                 return NotFound();
             }
 
             db.CustomerContacts.Remove(customerContacts);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(customerContacts);
         }
