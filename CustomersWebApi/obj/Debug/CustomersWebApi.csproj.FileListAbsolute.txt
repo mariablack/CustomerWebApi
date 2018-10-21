@@ -207,3 +207,4 @@ C:\Users\Tzan\source\repos\CustomerWebApi\CustomersWebApi\obj\Debug\CustomersWeb
 C:\Users\Tzan\source\repos\CustomerWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.csproj.CopyComplete
 C:\Users\Tzan\source\repos\CustomerWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.dll
 C:\Users\Tzan\source\repos\CustomerWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.pdb
+C:\Users\Tzan\source\repos\CustomerWebApi\CustomersWebApi\obj\Debug\CustomersWebApi.csprojAssemblyReference.cache
